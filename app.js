@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
@@ -46,9 +45,9 @@ const sess = {
   cookie: {}, // add empty cookie to the session by default
   resave: false,
   saveUninitialized: true,
-  genid: (req) => crypto.randomBytes(16).toString('hex'),
+  genid: () => crypto.randomBytes(16).toString('hex'),
   store: new (require('express-sessions'))({
-  	storage: 'redis',
+    storage: 'redis',
     instance: client, // optional
     collection: 'sessions', // optional
   }),
@@ -85,7 +84,7 @@ app.use((req, res, next) => {
 });
 
 // error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
