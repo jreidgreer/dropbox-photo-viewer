@@ -6,7 +6,7 @@ const router = express.Router();
 /* GET home page. */
 router.get('/', controller.home);
 
-router.get('/sub/:subpath*', controller.home);
+router.get('/sub/:subpath(*)', controller.home);
 
 router.get('/login', controller.login);
 

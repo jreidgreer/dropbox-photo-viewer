@@ -11,14 +11,14 @@ const mycache = new NodeCache();
 module.exports.home = async (req, res, next) => {
   const { token } = req.session;
   const subpath = req.params.subpath ? `/${req.params.subpath}` : '';
+  const breadcrumbs = subpath.replace(/^\/|\/$/g, '').split('/');
 
   if (token) {
     try {
       const { paths, folders } = await getLinksAsync(token, subpath);
-      console.log('folders', paths);
 
       if (paths.length > 0) {
-        res.render('gallery', { imgs: paths, layout: false });
+        res.render('gallery', { imgs: paths, folders, breadcrumbs, layout: false });
       } else {
         // if no images, ask user to upload some
         res.render('empty', { layout: false });

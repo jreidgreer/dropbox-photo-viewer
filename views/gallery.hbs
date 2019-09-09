@@ -5,13 +5,39 @@
 	<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
 	<script src="/galleria/galleria-1.5.7.min.js"></script>
 	<script type='text/javascript' src='/javascripts/page.js'></script>
+	<link rel="stylesheet" href="/stylesheets/style.css">
 	<link rel="stylesheet" href="/stylesheets/page.css">
 </head>
 <body>
-	<div class="galleria">
-		{{#each imgs}}
-		<img src="{{this}}">
-		{{/each}}
+	<div class="gallery">
+		<div class="folders">
+			{{#if folders}}
+			<h2>Folders in this directory:</h2>
+			<ul>
+			{{#each folders}}
+				<li><a href="/sub{{this.path_lower}}">{{this.name}}</a></li>
+			{{/each}}
+			</ul>
+			{{else}}
+			<h2>No folders in this directory</h2>
+			{{/if}}
+		</div>
+
+		<div class="gallery-container">
+			<ul class="breadcrumbs">
+				<li><a href="/">/</a></li>
+				{{#each breadcrumbs}}
+				<span>&#62;</span>
+				<li><a href="/sub/{{this}}">{{this}}</a></li>
+				{{/each}}
+			</ul>
+
+			<div class="galleria">
+				{{#each imgs}}
+				<img src="{{this}}">
+				{{/each}}
+			</div>
+		</div>
 	</div>
 </body>
 </html>
