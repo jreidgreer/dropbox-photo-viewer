@@ -46,11 +46,11 @@ const sess = {
   resave: false,
   saveUninitialized: true,
   genid: () => crypto.randomBytes(16).toString('hex'),
-  store: new (require('express-sessions'))({
-    storage: 'redis',
-    // instance: client, // optional
-    collection: 'sessions', // optional
-  }),
+  // store: new (require('express-sessions'))({
+  //   storage: 'redis',
+  //   instance: client, // optional
+  //   collection: 'sessions', // optional
+  // }),
 };
 
 
