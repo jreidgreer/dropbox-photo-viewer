@@ -8,9 +8,9 @@ const bodyParser = require('body-parser');
 const app = express();
 
 // session management variables
-const redis = require('redis');
+// const redis = require('redis');
 
-const client = redis.createClient(process.env.REDIS_URL);
+// const client = redis.createClient(process.env.REDIS_URL);
 const crypto = require('crypto');
 const session = require('express-session');
 
@@ -48,7 +48,7 @@ const sess = {
   genid: () => crypto.randomBytes(16).toString('hex'),
   store: new (require('express-sessions'))({
     storage: 'redis',
-    instance: client, // optional
+    // instance: client, // optional
     collection: 'sessions', // optional
   }),
 };
