@@ -10,9 +10,12 @@ const mycache = new NodeCache();
 // steps 1,2,3
 module.exports.home = async (req, res, next) => {
   const { token } = req.session;
+  const subpath = req.params.subpath ? `/${req.params.subpath}` : '';
+
   if (token) {
     try {
-      const paths = await getLinksAsync(token);
+      const { paths, folders } = await getLinksAsync(token, subpath);
+      console.log('folders', paths);
 
       if (paths.length > 0) {
         res.render('gallery', { imgs: paths, layout: false });
@@ -21,6 +24,7 @@ module.exports.home = async (req, res, next) => {
         res.render('empty', { layout: false });
       }
     } catch (error) {
+      console.error(error);
       return next(new Error('Error getting images from Dropbox'));
     }
   } else {
@@ -141,9 +145,9 @@ function destroySessionAsync(req) {
 It is a two step process:
 1.  Get a list of all the paths of files in the folder
 2.  Fetch a temporary link for each file in the folder */
-async function getLinksAsync(token) {
+async function getLinksAsync(token, path = '') {
   // List images from the root of the app folder
-  const result = await listImagePathsAsync(token, '');
+  const result = await listImagePathsAsync(token, path);
 
   // Get a temporary link for each of those paths returned
   const temporaryLinkResults = await getTemporaryLinksForPathsAsync(token, result.paths);
@@ -151,7 +155,7 @@ async function getLinksAsync(token) {
   // Construct a new array only with the link field
   const temporaryLinks = temporaryLinkResults.map((entry) => entry.link);
 
-  return temporaryLinks;
+  return { paths: temporaryLinks, folders: result.folders };
 }
 
 
@@ -174,16 +178,21 @@ async function listImagePathsAsync(token, path) {
     // Filter response to images only
     const entriesFiltered = result.entries.filter((entry) => entry.path_lower.search(/\.(gif|jpg|jpeg|tiff|png)$/i) > -1);
 
+    // Get folders
+    const folders = result.entries.filter((entry) => entry['.tag'] === 'folder');
     // Get an array from the entries with only the path_lower fields
     const paths = entriesFiltered.map((entry) => entry.path_lower);
 
     // return a cursor only if there are more files in the current folder
-    const response = {};
-    response.paths = paths;
+    const response = { paths, folders };
+
     if (result.hasmore) response.cursor = result.cursor;
+
     return response;
   } catch (error) {
-    return next(new Error(`error listing folder. ${error.message}`));
+    console.error(error);
+
+    return new Error(`error listing folder. ${error.message}`);
   }
 }
 
