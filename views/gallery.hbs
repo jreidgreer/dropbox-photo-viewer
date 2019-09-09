@@ -26,10 +26,12 @@
 		<div class="gallery-container">
 			<ul class="breadcrumbs">
 				<li><a href="/">/</a></li>
-				{{#each breadcrumbs}}
-				<span>&#62;</span>
-				<li><a href="/sub/{{this}}">{{this}}</a></li>
-				{{/each}}
+				{{#if breadcrumbs}}
+					{{#each breadcrumbs}}
+					<span>&#62;</span>
+					<li><a href="/sub/{{this}}">{{this}}</a></li>
+					{{/each}}
+				{{/if}}
 			</ul>
 
 			<div class="galleria">

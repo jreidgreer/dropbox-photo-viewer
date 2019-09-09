@@ -11,7 +11,7 @@ const mycache = new NodeCache();
 module.exports.home = async (req, res, next) => {
   const { token } = req.session;
   const subpath = req.params.subpath ? `/${req.params.subpath}` : '';
-  const breadcrumbs = subpath.replace(/^\/|\/$/g, '').split('/');
+  const breadcrumbs = req.params.subpath ? subpath.replace(/^\/|\/$/g, '').split('/') : null;
 
   if (token) {
     try {
