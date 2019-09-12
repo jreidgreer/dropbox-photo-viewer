@@ -17,7 +17,7 @@ module.exports.home = async (req, res, next) => {
     try {
       const { paths, folders } = await getLinksAsync(token, subpath);
 
-      if (paths.length > 0) {
+      if (paths.length > 0 || folders.length > 0) {
         res.render('gallery', { imgs: paths, folders, breadcrumbs, layout: false });
       } else {
         // if no images, ask user to upload some

@@ -9,6 +9,7 @@ a {
   color: #00B7FF;
 }
 
-#empty{	
-	text-align: center;
+#empty {	
+  text-align: center;
+  background-color: #FFF;
 }
